@@ -3,6 +3,7 @@ session_start();
 if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'admin') {
     echo '<a href="admin.php">Panel administratora</a>';
 }
+
 // Połączenie z bazą danych
 $servername = "localhost";
 $username = "root";
@@ -37,7 +38,7 @@ if ($result->num_rows > 0) {
 }
 
 // Pobranie komentarzy dla danego tematu
-$sql = "SELECT c.comment_content, c.comment_date, u.username
+$sql = "SELECT c.comment_id, c.comment_content, c.comment_date, u.username
         FROM comments c
         JOIN users u ON c.user_id = u.user_id
         WHERE c.topic_id = $topicID";
@@ -69,6 +70,7 @@ $conn->close();
 <?php
 if ($comments->num_rows > 0) {
     while ($comment = $comments->fetch_assoc()) {
+        $commentID = $comment['comment_id'];
         $commentContent = $comment['comment_content'];
         $commentDate = $comment['comment_date'];
         $commentAuthor = $comment['username'];
@@ -76,6 +78,16 @@ if ($comments->num_rows > 0) {
         echo "<p><strong>Autor:</strong> $commentAuthor</p>";
         echo "<p><strong>Data:</strong> $commentDate</p>";
         echo "<p>$commentContent</p>";
+
+        // Przycisk zgłaszania komentarza
+        echo "<form method='POST' action='reportcomment.php'>";
+        echo "<input type='hidden' name='comment_id' value='$commentID'>";
+        echo "<input type='hidden' name='topic_id' value='$topicID'>";
+        echo "<label>Treść zgłoszenia:</label><br>";
+        echo "<textarea name='report_content' required></textarea><br>";
+        echo "<input type='submit' value='Zgłoś'>";
+        echo "</form>";
+
         echo "<hr>";
     }
 } else {
@@ -95,7 +107,6 @@ if ($comments->num_rows > 0) {
     <input type="submit" value="Wyloguj">
 </form>
 <a href="panel.php">Powrót do panelu</a>
-
 
 </body>
 </html>

@@ -7,4 +7,5 @@ if ($_SESSION['account_type'] !== 'admin') {
 }
 ?>
 <a href="panel.php">Powrót do panelu głownego</a>
+<a href="zgloszenia.php">Zgłoszenia</a>
 
