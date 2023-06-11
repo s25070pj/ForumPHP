@@ -1,6 +1,8 @@
 <?php
 session_start();
-
+if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'admin') {
+    echo '<a href="admin.php">Panel administratora</a>';
+}
 // Połączenie z bazą danych
 $servername = "localhost";
 $username = "root";
@@ -88,6 +90,12 @@ if ($comments->num_rows > 0) {
     <textarea name="comment_content" required></textarea><br>
     <input type="submit" value="Dodaj komentarz">
 </form>
+
+<form method="POST" action="logout.php">
+    <input type="submit" value="Wyloguj">
+</form>
+<a href="panel.php">Powrót do panelu</a>
+
 
 </body>
 </html>

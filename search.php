@@ -71,6 +71,7 @@ if (isset($_GET['search'])) {
     <br>
     <input type="submit" name="search" value="Szukaj">
 </form>
+<a href="panel.php">Powrót do panelu</a>
 
 </body>
 </html>

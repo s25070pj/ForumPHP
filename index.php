@@ -69,10 +69,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($result->num_rows == 1) {
                     $row = $result->fetch_assoc();
                     $hashedPassword = $row['password'];
+                    $accountType = $row['account_type']; // Odczytanie pola account_type
+
                     // Sprawdzenie poprawności hasła
                     if (password_verify($password, $hashedPassword)) {
-                        $_SESSION['username'] = $username; // Zapisanie nazwy użytkownika w sesji
-                        header("Location: panel.php"); // Przekierowanie do panelu użytkownika
+                        $_SESSION['username'] = $username;
+                        $_SESSION['account_type'] = $accountType; // Zapisanie wartości account_type w sesji
+                        header("Location: panel.php");
                         exit();
                     } else {
                         return "Nieprawidłowe hasło.";
