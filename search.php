@@ -56,9 +56,36 @@ if (isset($_GET['search'])) {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+
     <title>Wyszukiwanie</title>
 </head>
+
 <body>
+<header>
+    <nav>
+        <ul class="navigation">
+            <li><a href="panel.php">Strona główna</a></li>
+            <li><a href="search.php">Wyszukiwanie</a></li>
+            <li><a href="creationoftopic.php">Utwórz nowy temat</a></li>
+            <li class="logout-button"><?php
+                session_start();
+                if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'admin') {
+                    echo '<a href="admin.php">Panel administratora</a>';
+                }?>
+            </li>
+        </ul>
+        <form method="POST" action="logout.php">
+            <input type="submit" value="Wyloguj">
+
+        </form>
+    </nav>
+</header>
+
+<div class="container">
+
+
+
 <h2>Wyszukiwanie</h2>
 
 <form method="GET" action="search_results.php">
@@ -71,7 +98,7 @@ if (isset($_GET['search'])) {
     <br>
     <input type="submit" name="search" value="Szukaj">
 </form>
-<a href="panel.php">Powrót do panelu</a>
+</div>
 
 </body>
 </html>

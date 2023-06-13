@@ -6,33 +6,37 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ForumPHP</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="container">
+    <div class="form-container">
 
-<h2>Logowanie</h2>
-<form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
-    <label>Nazwa użytkownika:</label>
-    <input type="text" name="login_username" required><br>
+        <h2>Logowanie</h2>
+        <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
+            <label>Nazwa użytkownika:</label>
+            <input type="text" name="login_username" required><br>
 
-    <label>Hasło:</label>
-    <input type="password" name="login_password" required><br>
+            <label>Hasło:</label>
+            <input type="password" name="login_password" required><br>
 
-    <input type="submit" value="Zaloguj">
-</form>
+            <input type="submit" value="Zaloguj">
+        </form>
+    </div>
 
-<hr>
+    <div class="form-container">
+        <h2>Rejestracja użytkownika</h2>
+        <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
+            <label>Nazwa użytkownika:</label>
+            <input type="text" name="register_username" required><br>
 
-<h2>Rejestracja użytkownika</h2>
-<form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
-    <label>Nazwa użytkownika:</label>
-    <input type="text" name="register_username" required><br>
+            <label>Hasło:</label>
+            <input type="password" name="register_password" required><br>
 
-    <label>Hasło:</label>
-    <input type="password" name="register_password" required><br>
-
-    <input type="submit" value="Zarejestruj">
-</form>
-
+            <input type="submit" value="Zarejestruj">
+        </form>
+    </div>
+</div>
 <?php
 session_start();
 
@@ -62,7 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Proszę wypełnić wszystkie pola logowania.";
         } else {
             // Funkcja do uwierzytelniania użytkownika
-            function authenticateUser($username, $password, $conn) {
+            function authenticateUser($username, $password, $conn)
+            {
                 // Sprawdzenie, czy użytkownik o podanej nazwie istnieje w bazie danych
                 $query = "SELECT * FROM users WHERE username = '$username'";
                 $result = $conn->query($query);
@@ -102,7 +107,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Proszę wypełnić wszystkie pola rejestracji.";
         } else {
             // Funkcja do rejestracji użytkownika
-            function registerUser($username, $password, $conn) {
+            function registerUser($username, $password, $conn)
+            {
                 // Sprawdzenie, czy użytkownik o podanej nazwie już istnieje
                 $query = "SELECT * FROM users WHERE username = '$username'";
                 $result = $conn->query($query);
@@ -134,5 +140,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 
+<script src="script.js"></script>
 </body>
 </html>

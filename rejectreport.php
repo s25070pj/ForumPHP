@@ -38,12 +38,11 @@
     $sql = "DELETE FROM Reports WHERE comment_id = '$commentID'";
     $conn->query($sql);
 
-    // Usunięcie komentarza z bazy danych
-    $sql = "DELETE FROM Comments WHERE comment_id = '$commentID'";
+
     if ($conn->query($sql) === TRUE) {
-        echo "Komentarz został usunięty.";
+        echo "Zgłoszenie odrzucone.";
     } else {
-        echo "Błąd podczas usuwania komentarza: " . $conn->error;
+        echo "Błąd podczas odrzucania zgłoszenia " . $conn->error;
     }
 
 

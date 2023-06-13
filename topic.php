@@ -1,8 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'admin') {
-    echo '<a href="admin.php">Panel administratora</a>';
-}
+
 
 // Połączenie z bazą danych
 $servername = "localhost";
@@ -48,65 +46,97 @@ $comments = $conn->query($sql);
 $conn->close();
 ?>
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Temat: <?php echo $topicTitle; ?></title>
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+        function showReportForm(commentId) {
+            var reportForm = document.getElementById('report-form-' + commentId);
+            reportForm.style.display = 'block';
+        }
+    </script>
 </head>
 <body>
-<h2>Temat: <?php echo $topicTitle; ?></h2>
-<p><strong>Autor:</strong> <?php echo $username; ?></p>
-<p><strong>Data:</strong> <?php echo $topicDate; ?></p>
-<p><?php echo $topicContent; ?></p>
+<header>
+    <nav>
+        <ul class="navigation">
+            <li><a href="panel.php">Strona główna</a></li>
+            <li><a href="search.php">Wyszukiwanie</a></li>
+            <li><a href="creationoftopic.php">Utwórz nowy temat</a></li>
+            <li><?php
+                if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'admin') {
+                    echo '<a href="admin.php">Panel administratora</a>';
+                }?>
+            </li>
+        </ul>
+        <form method="POST" action="logout.php">
+            <input type="submit" value="Wyloguj">
+        </form>
+    </nav>
+</header>
 
-<hr>
+<div class="container">
+    <h2>Temat: <?php echo $topicTitle; ?></h2>
+    <p><strong>Autor:</strong> <?php echo $username; ?></p>
+    <p><strong>Data:</strong> <?php echo $topicDate; ?></p>
+    <p><?php echo $topicContent; ?></p>
 
-<h3>Komentarze</h3>
+    <hr>
 
-<?php
-if ($comments->num_rows > 0) {
-    while ($comment = $comments->fetch_assoc()) {
-        $commentID = $comment['comment_id'];
-        $commentContent = $comment['comment_content'];
-        $commentDate = $comment['comment_date'];
-        $commentAuthor = $comment['username'];
+    <h3>Komentarze</h3>
 
-        echo "<p><strong>Autor:</strong> $commentAuthor</p>";
-        echo "<p><strong>Data:</strong> $commentDate</p>";
-        echo "<p>$commentContent</p>";
+    <?php
+    if ($comments->num_rows > 0) {
+        while ($comment = $comments->fetch_assoc()) {
+            $commentID = $comment['comment_id'];
+            $commentContent = $comment['comment_content'];
+            $commentDate = $comment['comment_date'];
+            $commentAuthor = $comment['username'];
+            ?>
 
-        // Przycisk zgłaszania komentarza
-        echo "<form method='POST' action='reportcomment.php'>";
-        echo "<input type='hidden' name='comment_id' value='$commentID'>";
-        echo "<input type='hidden' name='topic_id' value='$topicID'>";
-        echo "<label>Treść zgłoszenia:</label><br>";
-        echo "<textarea name='report_content' required></textarea><br>";
-        echo "<input type='submit' value='Zgłoś'>";
-        echo "</form>";
+            <div class="comment">
+                <p><strong>Autor:</strong> <?php echo $commentAuthor; ?></p>
+                <p><strong>Data:</strong> <?php echo $commentDate; ?></p>
+                <p><?php echo $commentContent; ?></p>
 
-        echo "<hr>";
+                <div class="report-button" onclick="showReportForm(<?php echo $commentID; ?>)">Zgłoś</div>
+
+                <form id="report-form-<?php echo $commentID; ?>" class="report-form" method="POST" action="reportcomment.php">
+                    <input type="hidden" name="comment_id" value="<?php echo $commentID; ?>">
+                    <input type="hidden" name="topic_id" value="<?php echo $topicID; ?>">
+                    <label>Treść zgłoszenia:</label><br>
+                    <textarea name="report_content" required></textarea><br>
+                    <input type="submit" value="Zgłoś">
+                </form>
+            </div>
+
+            <hr>
+
+            <?php
+        }
+    } else {
+        echo "Brak komentarzy.";
     }
-} else {
-    echo "Brak komentarzy.";
-}
-?>
+    ?>
 
-<!-- Formularz do dodawania komentarzy -->
-<form method="POST" action="addcomment.php">
-    <input type="hidden" name="topic_id" value="<?php echo $topicID; ?>">
-    <label>Treść komentarza:</label><br>
-    <textarea name="comment_content" required></textarea><br>
-    <input type="submit" value="Dodaj komentarz">
-</form>
+    <!-- Formularz do dodawania komentarzy -->
+    <form method="POST" action="addcomment.php">
+        <input type="hidden" name="topic_id" value="<?php echo $topicID; ?>">
+        <label>Treść komentarza:</label><br>
+        <textarea name="comment_content" required></textarea><br>
+        <input type="submit" value="Dodaj komentarz">
+    </form>
 
-<form method="POST" action="logout.php">
-    <input type="submit" value="Wyloguj">
-</form>
-<a href="panel.php">Powrót do panelu</a>
+</div>
+
+<footer>
+    <p>Forum &copy; 2023. Wszelkie prawa zastrzeżone.</p>
+</footer>
 
 </body>
 </html>

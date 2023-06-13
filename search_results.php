@@ -69,12 +69,34 @@ if (isset($_GET['searchQuery']) && isset($_GET['searchType'])) {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Wyniki wyszukiwania</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<header>
+    <nav>
+        <ul class="navigation">
+            <li><a href="panel.php">Strona główna</a></li>
+            <li><a href="search.php">Wyszukiwanie</a></li>
+            <li><a href="creationoftopic.php">Utwórz nowy temat</a></li>
+            <li class="logout-button"><?php
+                session_start();
+                if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'admin') {
+                    echo '<a href="admin.php">Panel administratora</a>';
+                }?>
+            </li>
+        </ul>
+        <form method="POST" action="logout.php">
+            <input type="submit" value="Wyloguj">
+
+        </form>
+    </nav>
+</header>
+<div class="container">
 <h2>Wyniki wyszukiwania</h2>
 
 <?php if (isset($resultsArray) && !empty($resultsArray)) : ?>
     <?php foreach ($resultsArray as $row) : ?>
+    <hr>
         <?php if ($searchType === 'users') : ?>
             <h3>Użytkownik: <?php echo $row['username']; ?></h3>
             <p>ID użytkownika: <?php echo $row['user_id']; ?></p>
@@ -105,5 +127,6 @@ if (isset($_GET['searchQuery']) && isset($_GET['searchType'])) {
 <?php else : ?>
     <p>Brak wyników wyszukiwania.</p>
 <?php endif; ?>
+</div>
 </body>
 </html>
