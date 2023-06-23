@@ -8,10 +8,10 @@ if (!isset($_SESSION['username'])) {
 }
 
 // Połączenie z bazą danych
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "forum";
+$servername = "5.39.83.70";
+$username = "adi";
+$password = "superHaslo1$";
+$dbname = "adi_db";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

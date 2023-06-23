@@ -39,11 +39,12 @@
 </div>
 <?php
 session_start();
+// Połączenie z bazą danych
+$servername = "5.39.83.70";
+$username = "adi";
+$password = "superHaslo1$";
+$dbname = "adi_db";
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "forum";
 
 // Tworzenie połączenia
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -120,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
                 // Dodanie użytkownika do bazy danych
-                $query = "INSERT INTO users (username, password) VALUES ('$username', '$hashedPassword')";
+                $query = "INSERT INTO users (username, password, account_type) VALUES ('$username', '$hashedPassword', 'user')";
                 if ($conn->query($query) === TRUE) {
                     return "Rejestracja zakończona sukcesem";
                 } else {
@@ -140,6 +141,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 
-<script src="script.js"></script>
+
 </body>
 </html>
